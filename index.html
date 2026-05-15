@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -486,6 +486,82 @@
         justify-content: center;
         color: #1f2937;
     }
+    /* --- EXISTING STYLES (KEEP YOURS) --- */
+/* ... keep your core, preloader, and section styles ... */
+
+/* --- MOBILE OPTIMIZATIONS (Add these at the bottom of your style tag) --- */
+@media (max-width: 768px) {
+    /* Navbar & Logo */
+    .navbar { padding: 0 20px; height: 60px; }
+    .logo-box { width: 35px; height: 35px; }
+
+    /* Hero Search */
+    .hero { height: auto; min-height: 100vh; padding-top: 80px; }
+    .glass-row { flex-direction: column; gap: 10px; width: 100%; }
+    .search-container { width: 90%; max-width: 100%; }
+    .search-btn { width: 100%; border-radius: 12px; padding: 15px; }
+
+    /* Section 2: Sponsors */
+    .sponsor-header { padding: 0 20px; }
+    .sponsor-header h2 { font-size: 22px; letter-spacing: 2px; }
+    .logo-card { width: 110px; height: 110px; padding: 15px; }
+
+    /* Section 3: Team */
+    .section-3 { padding: 60px 5%; height: auto; }
+    .team-grid { grid-template-columns: 1fr; gap: 50px; text-align: center; }
+    .team-header-large { font-size: 38px; letter-spacing: 5px; margin-bottom: 15px; }
+    .team-desc { margin: 0 auto 30px auto; font-size: 14px; }
+    .join-us-container { margin: 0 auto; transform: scale(0.9); }
+    
+    /* Orbit Area Adjustment */
+    .staff-orbit { height: 350px; margin-top: 20px; }
+    .staff-member { width: 70px; height: 70px; }
+    .staff-name-display { 
+        font-size: 20px; 
+        letter-spacing: 8px; 
+        width: 100%; 
+        text-align: center; 
+        right: 0; 
+        bottom: -20px; 
+    }
+
+    /* Section 4: About */
+    .section-4 { padding: 60px 8%; }
+    .header-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .main-title { font-size: 1.5rem; letter-spacing: 0.2em; }
+
+    /* Section 5: Footer */
+    .section-5 { height: auto; padding: 40px 0 0 0; }
+    .footer-content { 
+        flex-direction: column; 
+        height: auto; 
+        gap: 40px; 
+        padding-top: 80px; 
+        padding-bottom: 100px;
+        text-align: center; 
+    }
+    .footer-logo-container { left: 50%; transform: translateX(-50%); top: 20px; }
+    .footer-col h3 { margin-bottom: 10px; }
+    .footer-link { margin: 0 auto 10px auto; }
+    .social-icons { justify-content: center; }
+    .skyline-bg { height: 12vh; }
+
+    /* Search Overlay (Section 8) */
+    .search-card { 
+        grid-template-columns: 1fr; 
+        margin: 10px; 
+        padding: 20px; 
+        border-radius: 25px; 
+    }
+    .carousel-container { height: 250px; }
+    .glass-sub-box { padding: 15px; }
+}
+
+/* Fix for very small screens */
+@media (max-width: 400px) {
+    .team-header-large { font-size: 28px; }
+    .glass-plus-btn { width: 120px; height: 60px; }
+}
 </style>
 
 <div id="app-modal-overlay">
@@ -754,7 +830,32 @@
     </div>
 </div>
 
-<script>
+<script>// 1. Update the Orbit Mouse Move to ignore small screens
+orbitArea.addEventListener('mousemove', (e) => {
+    if (window.innerWidth < 768) return; // Prevent jitter on mobile touch
+    
+    const rect = orbitArea.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    members.forEach((m, i) => gsap.to(m, { x: x * (i + 1) * 15, y: y * (i + 1) * 15, duration: 1 }));
+});
+
+// 2. Adjust Form Submission for Mobile
+function handleFormSubmission() {
+    const form = document.getElementById('applicationForm');
+    if(!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const tl = gsap.timeline();
+    // Scroll to top of modal so user sees success message on mobile
+    modalWrap.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    tl.to("#section6-form", { opacity: 0, y: -50, duration: 0.5 })
+      .set("#section7-success", { display: "flex", opacity: 0 })
+      .to("#section7-success", { opacity: 1, duration: 0.7 });
+}
     const searchOverlay = document.getElementById('search-overlay');
     let slideIdx = 0;
     let timer;
@@ -789,6 +890,7 @@
             dots[slideIdx].style.background = "white";
         }, 3000);
     }
+
 </script>
 
 </body>
