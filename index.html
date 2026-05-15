@@ -8,7 +8,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    
     <style>
         /* --- 1. CORE & RESET --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -181,6 +181,44 @@
         .social-icons { display: flex; gap: 20px; }
         .social-icons a { color: white; font-size: 20px; transition: all 0.3s ease; }
         .social-icons a:hover { filter: drop-shadow(0 0 8px white); transform: translateY(-5px); }
+        /* Position the logo header in the top left of the overlay */
+.overlay-header {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 9001;
+}
+
+/* Specific styling for the PNG logo box in Section 8 */
+.overlay-header .logo-box {
+    width: 50px; 
+    height: 50px;
+    background: transparent; /* Ensures no background shows behind your PNG */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-header .logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Keeps logo proportions perfect */
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px) {
+    .overlay-header {
+        top: 20px;
+        left: 20px;
+    }
+    .overlay-header .logo-box {
+        width: 40px;
+        height: 40px;
+    }
+}
 
         .rtl { direction: rtl; text-align: right; }
     </style>
@@ -355,7 +393,19 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
         }
+        // Inside openSearchOverlay() function
+const tl = gsap.timeline();
+
+// ... after your background animation ...
+
+tl.from("#overlay-logo", {
+    x: -50,          // Slides in from the left
+    opacity: 0,      // Fades in
+    duration: 0.7, 
+    ease: "power3.out"
+}, "-=0.4");        // Starts slightly before the background finishes
     </script>
+    
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
@@ -758,8 +808,17 @@
 <button onclick="openSearchOverlay()" style="margin: 50px; padding: 15px 30px; cursor:pointer; border-radius: 10px; background:#4f46e5; color:white; border:none;">Open Property Detail</button>
 
 <div id="search-overlay">
+    
     <div id="search-close" onclick="closeSearchOverlay()">×</div>
     <p style="position: absolute; top: 40px; right: 100px; font-size: 10px; font-weight: 900; letter-spacing: 2px;">SECTION 8</p>
+    <div class="overlay-header" id="overlay-logo">
+    <div class="logo-box">
+        <img src="logo.png" alt="Logo">
+    </div>
+    <span style="font-weight: 900; font-size: 11px; letter-spacing: 3px; color: #1a23ff; text-transform: uppercase;">
+        
+    </span>
+</div>
 
     <div class="search-card">
         <div style="display: flex; flex-direction: column; gap: 30px;">
@@ -1048,6 +1107,9 @@
             activeIntervals = [];
         }});
     }
+    
 </script>
+
 </body>
 </html>
+
